@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>СОЧ · Физика · 9 класс · 1 четверть</title>
+<style>
+:root{--bg:#0b1020;--c:#121a33;--n:#22d3ee;--p:#a78bfa;--t:#e6edf7;--m:#8fa0c0}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 20% 0,#1b1f4a,var(--bg) 60%);color:var(--t);font:16px/1.5 system-ui,Segoe UI,Roboto,sans-serif}
+.w{max-width:820px;margin:0 auto;padding:12px}
+.hid{display:none!important}
+.card{background:var(--c);border:1px solid #2a3560;border-radius:14px;padding:14px;margin:12px 0}
+h1,h2{margin:.2em 0;color:var(--n);text-shadow:0 0 12px #22d3ee66}h1{font-size:1.35rem}
+.m{color:var(--m);font-size:.9rem}
+label{display:block;margin:10px 0 2px;color:var(--m)}
+input,select,textarea{width:100%;background:#0b1230;color:var(--t);border:1px solid #33427a;border-radius:10px;padding:10px;font:inherit}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--n);box-shadow:0 0 10px var(--n)}
+button{margin-top:14px;padding:12px 20px;border:0;border-radius:10px;font:600 1rem inherit;color:#04131a;background:linear-gradient(90deg,var(--n),var(--p));cursor:pointer;box-shadow:0 0 14px #22d3ee88}
+button:disabled{opacity:.35;box-shadow:none;cursor:not-allowed}
+.bar{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;gap:8px;background:#0b1020ee;border:1px solid #2a3560;border-radius:12px;padding:8px 12px;margin:6px 0}
+#tm{font:700 1.2rem monospace;color:var(--n)}#tm.low{color:#f87171}
+.qh{display:flex;justify-content:space-between;color:var(--p)}.pt{color:#fde047;font-weight:700}
+.part{margin:8px 0 0}.pl{color:var(--m);margin-bottom:4px}
+.opt{display:flex;gap:8px;align-items:flex-start;margin:5px 0;padding:8px 10px;border:1px solid #33427a;border-radius:10px;cursor:pointer;color:var(--t)}
+.opt input{width:auto;margin-top:5px}
+.opt:has(input:checked){border-color:var(--n);box-shadow:0 0 10px var(--n);background:#0e2a3a}
+.nf{display:inline-flex;align-items:center;gap:6px;margin:4px 8px 4px 0}.nf input{width:130px}
+.hint{font-size:.82rem;color:var(--m);border-left:3px solid var(--p);padding-left:8px;margin-top:8px}
+.sv{display:block;max-width:100%;height:auto;margin:8px 0;border-radius:10px}
+table.tb{border-collapse:collapse;margin:8px 0;background:#fff;color:#111}table.tb td,table.tb th{border:1px solid #444;padding:4px 10px;text-align:center}
+.md{position:fixed;inset:0;background:#000a;z-index:9;display:flex;align-items:center;justify-content:center;padding:16px}
+.big{font-size:1.6rem;color:#fde047}
+ul{padding-left:20px}
+</style></head><body><div class="w">
+<div id="s1" class="card"><h1>Суммативное оценивание за 1 четверть</h1>
+<div class="m">Физика · 9 класс · Учитель: Кунгозин Даулет Багдашұлы</div>
+<label>Фамилия и имя<input id="fio" autocomplete="off" placeholder="Введите ФИ"></label>
+<label>Класс<select id="cls"><option value="">— выберите —</option><option>9Б</option><option>9В</option></select></label>
+<label>Вариант<select id="var"><option value="">— выберите —</option><option value="1">Вариант 1</option><option value="2">Вариант 2</option></select></label>
+<button id="nx" disabled>Далее</button></div>
+<div id="s2" class="card hid"><h2>Правила работы</h2><ul>
+<li>Время на всю работу — <b>40 минут</b>, таймер вверху экрана. По окончании времени работа завершится автоматически.</li>
+<li>Баллы за каждое задание указаны в квадратных скобках [ ].</li>
+<li>Не сворачивайте браузер и не переключайтесь на другие приложения: уход со страницы <b>сразу завершает</b> работу.</li>
+<li>Не меняйте размер окна и не включайте режим разделённого экрана: первое нарушение — предупреждение, второе — завершение работы. Экранная клавиатура не считается нарушением.</li>
+<li>Правильность ответов во время работы не показывается. Калькулятором пользоваться можно.</li>
+<li>Попытка засчитывается с момента нажатия «Начать тест».</li></ul>
+<button id="go">Начать тест</button></div>
+<div id="s3" class="hid"><div class="bar"><span id="who" class="m"></span><span id="tm">40:00</span></div><div id="qs"></div>
+<button id="fin" style="width:100%">Завершить работу</button></div>
+<div id="s4" class="card hid"></div>
+<div id="md" class="md hid"><div class="card"><p id="mt"></p><button onclick="document.getElementById('md').classList.add('hid')">Понятно</button></div></div>
+</div>
+<script>
+const URL_='https://script.google.com/macros/s/AKfycbwyEtckYGRSJF9Sccj-gU4FfeKOV1yJRMM6MkkSUq8lewCp5AH3RN9rjMxoTu9huK_P/exec',MAXT=40*60,AB='ABCDE';
+const C=(o,a)=>({k:'c',o,a}),N=(a,l,tol=.015)=>({k:'n',a,l,tol}),T=a=>({k:'t',a}),S=(re,co)=>({k:'s',re,co});
+const P=(p,f,t)=>({p,f,t}),Q1=(n,t,o,a,svg)=>({n,t,svg,pr:[P(1,[C(o,a)])]});
+const ar=(x1,y1,x2,y2,c)=>{const a=Math.atan2(y2-y1,x2-x1),h=10;return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c}" stroke-width="3"/><polygon points="${x2},${y2} ${x2-h*Math.cos(a-.4)},${y2-h*Math.sin(a-.4)} ${x2-h*Math.cos(a+.4)},${y2-h*Math.sin(a+.4)}" fill="${c}"/>`};
+function gr(xm,ym,ysc,xl,yl,fn,u=34){const ox=48,oy=ym*u+26,W=ox+xm*u+34,H=oy+40,X=x=>ox+x*u,Y=y=>oy-y/ysc*u;let s=`<svg class="sv" viewBox="0 0 ${W} ${H}"><rect width="${W}" height="${H}" fill="#fff" rx="10"/>`;
+for(let i=0;i<=xm;i++)s+=`<line x1="${X(i)}" y1="${oy-ym*u}" x2="${X(i)}" y2="${oy}" stroke="#9ed8f5"/><text x="${X(i)}" y="${oy+16}" font-size="12" text-anchor="middle" fill="#123">${i}</text>`;
+for(let j=0;j<=ym;j++)s+=`<line x1="${ox}" y1="${oy-j*u}" x2="${X(xm)}" y2="${oy-j*u}" stroke="#9ed8f5"/><text x="${ox-6}" y="${oy-j*u+4}" font-size="12" text-anchor="end" fill="#123">${j*ysc}</text>`;
+return s+`<path d="M${ox} ${oy-ym*u-10}V${oy}H${X(xm)+12}" stroke="#1e3a8a" stroke-width="2.5" fill="none"/><text x="${W-4}" y="${oy+34}" font-size="14" text-anchor="end" fill="#1e3a8a" font-weight="700">${xl}</text><text x="6" y="16" font-size="14" fill="#1e3a8a" font-weight="700">${yl}</text>`+fn(X,Y)+`</svg>`}
+const svBike=`<svg class="sv" viewBox="0 0 280 130"><rect width="280" height="130" rx="12" fill="#e0f2fe"/><path d="M20 30C60 20 70 70 100 80S120 115 170 100S230 95 250 105" fill="none" stroke="#2563eb" stroke-width="4"/>${ar(20,30,250,105,'#dc2626')}<circle cx="20" cy="30" r="5" fill="#16a34a"/><circle cx="250" cy="105" r="5" fill="#f59e0b"/><text x="8" y="22" font-size="16" font-weight="700">A</text><text x="256" y="122" font-size="16" font-weight="700">B</text></svg>`;
+const svCirc=`<svg class="sv" viewBox="0 0 280 200"><rect width="280" height="200" rx="12" fill="#fef9c3"/><circle cx="165" cy="100" r="60" fill="#e0e7ff" stroke="#6366f1" stroke-width="3"/><path d="M135 48A60 60 0 0 1 195 48" fill="none" stroke="#6366f1" stroke-width="4"/><polygon points="200,52 187,43 187,58" fill="#6366f1"/>${ar(105,100,45,100,'#dc2626')}${ar(105,100,105,45,'#16a34a')}${ar(105,100,155,100,'#2563eb')}${ar(105,100,105,160,'#ea580c')}<circle cx="105" cy="100" r="7" fill="#111"/><g font-size="18" font-weight="700"><text x="30" y="94">1</text><text x="112" y="46">2</text><text x="140" y="92">3</text><text x="112" y="162">4</text><text x="86" y="120">M</text></g></svg>`;
+const svIncl=`<svg class="sv" viewBox="0 0 300 150"><rect width="300" height="150" rx="12" fill="#ecfccb"/><rect y="120" width="300" height="30" fill="#92400e"/><polygon points="30,50 270,120 30,120" fill="#fbbf24" stroke="#b45309" stroke-width="3"/><circle cx="44" cy="46" r="9" fill="#dc2626"/><polygon points="252,120 292,120 280,62 264,62" fill="#7c3aed"/><line x1="272" y1="112" x2="266" y2="68" stroke="#fff" stroke-width="3"/><text x="130" y="76" font-size="16" font-weight="700" fill="#92400e">s</text></svg>`;
+const svPar=`<svg class="sv" viewBox="0 0 300 150"><rect width="300" height="150" rx="12" fill="#0f172a"/><circle cx="55" cy="75" r="34" fill="#2563eb"/><path d="M40 58q12-6 20 4q-6 12-20 8zM62 86q10-2 14 8q-8 8-18 2z" fill="#22c55e"/><circle cx="270" cy="75" r="10" fill="#d1d5db"/><line x1="55" y1="75" x2="55" y2="41" stroke="#f87171" stroke-width="3"/><line x1="270" y1="75" x2="55" y2="41" stroke="#fde047" stroke-width="2"/><line x1="270" y1="75" x2="55" y2="75" stroke="#fde047" stroke-dasharray="5"/><g fill="#fff" font-size="13"><text x="60" y="58">Rз</text><text x="215" y="72" fill="#fde047">p</text><text x="245" y="104">Луна</text><text x="30" y="125">Земля</text></g></svg>`;
+const svG=gr(5,8,2,'t, с','v, м/с',(X,Y)=>`<line x1="${X(0)}" y1="${Y(2)}" x2="${X(4)}" y2="${Y(14)}" stroke="#f97316" stroke-width="4"/><path d="M${X(4)} ${Y(14)}V${Y(0)}M${X(4)} ${Y(14)}H${X(0)}" stroke="#7c3aed" stroke-dasharray="5" fill="none"/><circle cx="${X(0)}" cy="${Y(2)}" r="5" fill="#dc2626"/><circle cx="${X(4)}" cy="${Y(14)}" r="5" fill="#16a34a"/>`);
+const tb=(h,r)=>`<table class="tb"><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr>${r.map(a=>`<tr>${a.map(x=>`<td>${x}</td>`).join('')}</tr>`).join('')}</table>`;
+const KW='Выберите один вариант ответа.';
+const V={1:[
+Q1('1A','В какой из двух задач можно рассматривать Луну как материальную точку?<br>1) Рассчитать период обращения Луны вокруг Земли.<br>2) Рассчитать скорость движения точек поверхности Луны при её вращении вокруг своей оси.',['только в первом случае','только во втором случае','в обоих случаях'],0),
+Q1('1B','Велосипедист движется из точки A велотрека в точку B по кривой AB. Назовите физическую величину, которую изображает вектор AB.',['путь','перемещение','скорость'],1,svBike),
+Q1('1C','Какая из перечисленных величин является скалярной?',['скорость','путь','перемещение'],1),
+Q1('1D','Какая из приведённых формул соответствует определению скорости?',['v = v₀ + at','v = √(2aS)','v = ΔS/Δt','v = S·t'],2),
+Q1('1E','Какая из приведённых формул соответствует определению ускорения?',['a = v²/2S','a = Δv/Δt','a = v²/R','a = vt'],1),
+Q1('1F','У верхнего конца трубки, из которой выкачан воздух, находятся свинцовая дробинка, пробка и птичье перо. Какое из тел при одновременном старте первым достигнет нижнего конца трубки?',['дробинка','пробка','перо','все тела одновременно'],3),
+Q1('1G','Тело движется равномерно по окружности по часовой стрелке. Какая стрелка указывает направление вектора скорости тела в точке M?',['1','2','3','4'],1,svCirc),
+{n:'2',t:'В начальный момент времени тело находилось в точке с координатой 4 м, а через 2 мин от начала движения — в точке с координатой 124 м. Определите скорость тела и его перемещение.',pr:[
+P(1,[N(120,'t, с')],'Время движения в секундах'),
+P(1,[C(['x = x₀ + at²','x = v/t','x = x₀ + vt','x = S·t'],2)],'Формула координаты при равномерном движении'),
+P(1,[C(['v = (x − x₀)·t','v = t/(x − x₀)','v = x·t','v = (x − x₀)/t'],3)],'Формула проекции скорости'),
+P(1,[N(120,'Sₓ, м')],'Перемещение'),P(1,[N(1,'vₓ, м/с')],'Скорость')]},
+{n:'3',t:'В лабораторной работе по определению ускорения скатывающегося с желоба шарика ученик получил результаты, представленные в таблице. По данным опыта определите значение ускорения шарика. Ответ представьте в единицах СИ.',x:tb(['№ опыта','S, см','t, с'],[[1,30,2],[2,64,4],[3,100,5],[4,200,10]]),pr:[
+P(1,[C(['S = at','S = at²/2','S = v/t','S = a/t²'],1)],'Формула пути при равноускоренном движении без начальной скорости'),
+P(1,[C(['a = S/t²','a = 2S/t','a = 2S/t²','a = St²/2'],2)],'Формула ускорения'),
+P(1,[N(.15,'a₁, м/с²')],'Опыт 1'),P(1,[N(.08,'a₂, м/с²')],'Опыт 2'),P(1,[N(.08,'a₃, м/с²')],'Опыт 3'),P(1,[N(.04,'a₄, м/с²')],'Опыт 4')]},
+Q1('4A','Секундная стрелка часов делает один полный оборот. Чему равен период обращения?',['3600 с','1/60 с','60 с'],2),
+Q1('4B','Колесо велосипеда делает один оборот за 5 с. Определите частоту вращения.',['5 1/с','0,2 1/с','2 1/с'],1),
+Q1('4C','Винт моторной лодки делает 10 оборотов за 1 с. Чему равна угловая скорость винта?',['10 рад/с','π/10 рад/с','20π рад/с'],2),
+{n:'5',t:'Колесо велосипеда имеет радиус 50 см. С какой скоростью едет велосипедист, если колесо делает 120 об/мин? Чему равно его центростремительное ускорение? Принять π = 3,14.',pr:[P(1,[N(2,'ν, Гц')],'Частота вращения'),P(1,[N(6.28,'v, м/с')],'Скорость велосипедиста'),P(1,[N(78.9,'aц, м/с²')],'Центростремительное ускорение')]},
+Q1('6','Небесная сфера — это:',['воображаемая сфера бесконечно большого радиуса, описанная вокруг центра Галактики','хрустальная сфера, на которой, по представлению древних греков, прикреплены светила','воображаемая сфера произвольного радиуса, центром которой является глаз наблюдателя','воображаемая сфера — условная граница нашей Галактики'],2),
+Q1('7','Ближайшую к Солнцу точку орбиты называют…',['афелием','перигелием','эксцентриситетом'],1),
+Q1('8','Явление прохождения светилом небесного меридиана называется…',['прецессией','восходом','заходом','кульминацией'],3),
+{n:'9',t:'Вставьте пропущенные слова. Горизонтальным параллаксом (p) называется <b>[1]</b>, под которым со светила виден <b>[2]</b> Земли, перпендикулярный лучу <b>[3]</b>.',pr:[P(1,[T('угол')],'Слово [1]'),P(1,[T('радиус')],'Слово [2]'),P(1,[T('зрения')],'Слово [3]')]}
+],2:[
+{n:'1',t:'По графику зависимости скорости от времени найдите:',svg:svG,pr:[P(1,[N(2,'v₀, м/с')],'а) начальную скорость'),P(1,[N(14,'v, м/с')],'б) конечную скорость (в момент t = 4 с)'),P(1,[N(3,'a, м/с²')],'в) ускорение'),P(1,[N(32,'S, м')],'г) перемещение за 4 с')]},
+{n:'2',t:'Уравнение координаты имеет вид x = 8 + 9t − 2t² (все величины в СИ).',pr:[
+P(1,[C(['равномерное','равноускоренное','равнозамедленное','покой'],2)],'а) Охарактеризуйте движение'),
+P(1,[N(8,'x₀, м')],'б) Начальная координата'),
+P(1,[N(9,'v₀, м/с'),N(-4,'a, м/с²')],'в) Начальная скорость и ускорение (с учётом знака — направления)'),
+P(1,[N(17,'x, м')],'г) Координата в момент t = 3 с'),
+P(1,[N(9,'S, м')],'д) Перемещение за 3 с')]},
+{n:'3',t:'Определите ускорение тела при равноускоренном движении по данным опыта: шарик скатывается с наклонной плоскости без начальной скорости, время движения t = 0,5·n секунд, где n — число ударов метронома.',svg:svIncl,x:tb(['№ опыта','n','S, м'],[[1,4,'0,6'],[2,6,'1,35'],[3,8,'2,4']]),pr:[P(1,[N(.3,'a₁, м/с²')],'Опыт 1'),P(1,[N(.3,'a₂, м/с²')],'Опыт 2'),P(1,[N(.3,'a₃, м/с²')],'Опыт 3'),P(1,[N(.3,'a ср, м/с²')],'Среднее значение ускорения')]},
+{n:'4',t:'Тело движется по дуге окружности радиусом 60 м. За 5 с угол поворота равен 1,5 рад. Найдите линейную скорость движения тела.',pr:[P(1,[N(.3,'ω, рад/с')],'а) Угловая скорость'),P(1,[C(['v = ω/R','v = ωR','v = R/ω','v = ω²R'],1)],'б) Формула связи линейной и угловой скорости'),P(1,[N(18,'v, м/с')],'в) Линейная скорость')]},
+Q1('5','Автомобиль движется по закруглению дороги радиусом 80 м со скоростью 72 км/ч. Какова величина центростремительного ускорения автомобиля?',['0,25 м/с²','25 м/с²','5 м/с²','0,9 м/с²','90 м/с²'],2),
+Q1('6.1','Наиболее удалённую от Солнца точку орбиты называют…',['перигелием','эксцентриситетом','афелием'],2),
+Q1('6.2','Система отсчёта, связанная с Солнцем, предложенная Николаем Коперником, называется:',['геоцентрическая','гелиоцентрическая','центрическая','коперниковская'],1),
+Q1('6.3','Как происходит видимое движение планет?',['Планеты перемещаются по окружности.','Планеты перемещаются по эллипсу.','Планеты перемещаются петлеобразно.'],2),
+Q1('6.4','Что определяет второй закон Кеплера?',['радиус-вектор планеты за равные промежутки времени описывает равные площади','неравномерность движения планеты по орбите вокруг Солнца','равномерность движения планеты по орбите вокруг Солнца','очерёдность движения планет по орбите вокруг Солнца','радиус-вектор планеты за равные промежутки времени описывает один и тот же угол'],0),
+Q1('6.5','При каких условиях движение небесных тел будет происходить в точности по законам Кеплера?',['Если в Солнечной системе одна планета.','Если в Солнечной системе много планет, и каждая испытывает возмущения со стороны других.','Если существуют лишь два взаимно притягивающихся тела.'],2),
+Q1('7','Винт моторной лодки делает 20 оборотов за 1 с. Чему равна угловая скорость винта?',['20 рад/с','40π рад/с','π/20 рад/с'],1),
+{n:'8',t:'Угол, под которым со светила C виден радиус Земли, перпендикулярный лучу зрения, называется горизонтальным параллаксом p. Определите расстояние до Луны, если её горизонтальный параллакс p = 58′, sin p = 0,0169, Rз = 6400 км. Расстояние ответьте в километрах целым числом (например: 380000).',svg:svPar,pr:[P(1,[C(['S = Rз · sin p','S = Rз / sin p','S = sin p / Rз','S = Rз + sin p'],1)],'Формула расстояния'),P(1,[N(378698,'S, км',.01)],'Расстояние до Луны')]},
+{n:'9',t:'В начальный момент времени тело находилось в точке с координатой 20 м, а через 5 мин от начала движения — в точке с координатой 260 м. Определите скорость тела и его перемещение.',pr:[P(1,[N(300,'t, с')],'Время движения в секундах'),P(1,[N(240,'Sₓ, м')],'Перемещение'),P(1,[N(.8,'vₓ, м/с')],'Скорость')]},
+{n:'10',t:'Объясните, почему в перигелии планета движется быстрее, чем в афелии.',pr:[P(2,[S([/ближе к солнц|меньш\w* (расстоян|радиус)|мал\w* (расстоян|радиус)|короч\w* радиус/,/площад|втор\w* закон|кеплер|радиус-вектор/],'вблизи Солнца радиус-вектор короче; по 2-му закону Кеплера он описывает равные площади за равное время')])]}
+]};
+const H={c:KW,n:'Введите только число, без единиц измерения. Дробь пишите через запятую (например: 0,25). Если число отрицательное — поставьте «−».',t:'Впишите одно слово строчными буквами в той форме, в которой оно должно стоять в предложении.',s:'Напишите ответ 1–2 полными предложениями своими словами.'};
+const RS={finished:'Вы завершили работу.',time:'Время работы истекло.',left:'Работа завершена: вы покинули страницу теста.',resize:'Работа завершена: повторное изменение размера окна.'};
+const $=id=>document.getElementById(id);let st={},run=0,tm,bw,bh,kt=0,rt,cool=0;
+const chk=()=>{$('nx').disabled=!(/\S+\s+\S+/.test($('fio').value.trim())&&$('cls').value&&$('var').value)};
+['fio','cls','var'].forEach(i=>$(i).addEventListener('input',chk));
+$('nx').onclick=()=>{$('s1').classList.add('hid');$('s2').classList.remove('hid')};
+$('go').onclick=start;$('fin').onclick=()=>{if(confirm('Завершить работу и отправить результаты?'))fin('finished')};
+const fid=(i,j,k)=>`f_${i}_${j}_${k}`;
+function fld(f,i,j,k){const id=fid(i,j,k);
+if(f.k=='c')return f.o.map((o,x)=>`<label class="opt"><input type="radio" name="${id}" value="${x}"><span>${AB[x]}) ${o}</span></label>`).join('');
+if(f.k=='s')return `<textarea id="${id}" rows="3" placeholder="Ваш ответ предложением"></textarea>`;
+return `<span class="nf">${f.l||''}<input id="${id}" autocomplete="off" autocapitalize="off" ${f.k=='n'?'inputmode="decimal" placeholder="число"':'placeholder="слово"'}></span>`}
+function ren(){const qs=V[st.v];let h='';
+qs.forEach((q,i)=>{const tot=q.pr.reduce((s,p)=>s+p.p,0),ks=[...new Set(q.pr.flatMap(p=>p.f.map(f=>f.k)))];
+h+=`<div class="card"><div class="qh"><b>Задание ${q.n}</b><span class="pt">[${tot}]</span></div><div>${q.t}</div>${q.svg||''}${q.x||''}`;
+q.pr.forEach((p,j)=>{h+=`<div class="part">${p.t?`<div class="pl">${p.t}${q.pr.length>1?` <span class="pt">[${p.p}]</span>`:''}</div>`:''}${p.f.map((f,k)=>fld(f,i,j,k)).join('')}</div>`});
+h+=`<div class="hint">${ks.map(k=>H[k]).join(' ')}</div></div>`});$('qs').innerHTML=h}
+const norm=s=>String(s||'').toLowerCase().replace(/ё/g,'е').trim();
+function readf(f,i,j,k){if(f.k=='c'){const e=document.querySelector(`input[name="${fid(i,j,k)}"]:checked`);return e?+e.value:-1}return $(fid(i,j,k)).value}
+function gf(f,v){if(f.k=='c')return[v===f.a,v>=0?`${AB[v]}) ${f.o[v]}`:'—',`${AB[f.a]}) ${f.o[f.a]}`];
+if(f.k=='n'){const x=parseFloat(String(v).replace(',','.').replace(/[−–]/g,'-'));return[!isNaN(x)&&Math.abs(x-f.a)<=Math.abs(f.a)*f.tol,String(v).trim()||'—',String(f.a).replace('.',',')]}
+if(f.k=='t')return[norm(v)===f.a,String(v).trim()||'—',f.a];
+const m=f.re.filter(r=>r.test(norm(v))).length;return[m,String(v).trim()||'—',f.co]}
+function grade(p,i,j){let ok=1,sh=[],co=[],m=0;p.f.forEach((f,k)=>{const r=gf(f,readf(f,i,j,k));if(f.k=='s')m=r[0];else if(!r[0])ok=0;sh.push(r[1]);co.push(r[2])});
+return{got:p.f[0].k=='s'?Math.min(m,p.p):ok?p.p:0,sh:sh.join('; '),co:co.join('; ')}}
+function dev(){const u=navigator.userAgent,o=/iPhone/.test(u)?'iPhone':/iPad/.test(u)?'iPad':/Android/.test(u)?'Android':/Windows/.test(u)?'Windows':/Mac/.test(u)?'Mac':/Linux/.test(u)?'Linux':'?',t=/Mobi|iPhone/.test(u)?'смартфон':/iPad|Tablet|Android/.test(u)?'планшет':'ПК',b=(u.match(/(SamsungBrowser|Edg|Firefox|Chrome|Safari)\/[\d.]+/)||[''])[0];return `${t} · ${o} · ${screen.width}×${screen.height} · ${b}`}
+function start(){st={fio:$('fio').value.trim().replace(/\s+/g,' '),cls:$('cls').value,v:+$('var').value,t0:Date.now(),w:0};
+try{const k='soch9:'+[st.fio.toLowerCase(),st.cls,st.v].join('|');st.att=(+localStorage.getItem(k)||0)+1;localStorage.setItem(k,st.att)}catch(e){st.att=1}
+ren();$('who').textContent=`${st.fio} · ${st.cls} · вариант ${st.v}`;$('s2').classList.add('hid');$('s3').classList.remove('hid');
+run=1;bw=innerWidth;bh=innerHeight;scrollTo(0,0);tm=setInterval(tick,1000);tick()}
+function tick(){const r=MAXT-Math.floor((Date.now()-st.t0)/1000);if(r<=0){fin('time');return}
+$('tm').textContent=String(Math.floor(r/60)).padStart(2,'0')+':'+String(r%60).padStart(2,'0');$('tm').classList.toggle('low',r<300)}
+function fin(why){if(!run)return;run=0;clearInterval(tm);let sc=0,mx=0,ans=[];
+V[st.v].forEach((q,i)=>q.pr.forEach((p,j)=>{const r=grade(p,i,j);sc+=r.got;mx+=p.p;const ok=r.got==p.p;ans.push({ok,s:`${q.n}${p.t&&q.pr.length>1?' ('+p.t+')':''}: ${r.sh}${ok?'':'  → верно: '+r.co} [${r.got}/${p.p}]`})}));
+const pl={fio:st.fio,cls:st.cls,variant:st.v,score:sc,max:mx,attempts:st.att,spent:Math.min(Math.round((Date.now()-st.t0)/1000),MAXT),device:dev(),reason:why,answers:ans};
+$('s3').classList.add('hid');$('md').classList.add('hid');$('s4').classList.remove('hid');
+$('s4').innerHTML=`<h2>Работа завершена</h2><p class="big">Баллы: ${sc} из ${mx}</p><p>${RS[why]}</p><p id="ss" class="m">Отправка результатов…</p>`;scrollTo(0,0);send(pl)}
+async function send(p){const s=$('ss');
+if(!URL_||URL_.startsWith('PASTE')){s.textContent='Адрес Apps Script не указан — сообщите учителю.';return}
+for(let i=0;i<3;i++){try{await fetch(URL_,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(p)});s.textContent='✔ Результаты отправлены учителю.';return}catch(e){await new Promise(r=>setTimeout(r,2000))}}
+s.textContent='Не удалось отправить результаты. Сообщите учителю, не закрывая страницу.'}
+function warn(t){$('mt').textContent=t;$('md').classList.remove('hid')}
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&run)fin('left')});
+addEventListener('pagehide',()=>{if(run)fin('left')});
+['focusin','focusout'].forEach(e=>addEventListener(e,()=>kt=Date.now()));
+addEventListener('resize',()=>{if(!run)return;clearTimeout(rt);rt=setTimeout(()=>{
+if(!run||Date.now()-kt<1800||Date.now()<cool)return;
+const dw=Math.abs(innerWidth-bw),dh=Math.abs(innerHeight-bh),inp=/INPUT|TEXTAREA/.test((document.activeElement||{}).tagName||'');
+if(dw>80||(!inp&&dh>bh*.3)){st.w++;cool=Date.now()+1500;if(st.w>=2)fin('resize');else warn('Предупреждение: обнаружено изменение размера окна (например, разделённый экран). Верните прежний размер. При повторном нарушении работа будет завершена.')}},400)});
+</script></body></html>
